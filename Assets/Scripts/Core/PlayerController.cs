@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     private float reload = 1f;
     private bool IsShooting = false;
 
-    private Vector2 DirectionVector;
+    private Vector2 DirectionVector = Vector2.up;
 
     [SerializeField]
     private Object projectile;
@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
 
 
     private void Awake()
-    {
+    {       
         controls = new TankControls();
 
         rb = GetComponent<Rigidbody2D>();
@@ -30,28 +30,17 @@ public class PlayerController : MonoBehaviour
     {
         controls.Tank.Enable();
 
-        controls.Tank.Shooting.started += (x) => StartCoroutine(Shooting());
-
+        controls.Tank.Shooting.started += _ => StartCoroutine(Shooting());
+        controls.Tank.Movement.canceled += _ => rb.velocity = Vector2.zero;
         controls.Tank.Movement.started += ChangingDirection;
-        controls.Tank.Movement.canceled += (x) => DirectionVector = Vector2.zero;
     }
 
-    private void OnDisable()
+    private void Update()
     {
-        controls.Tank.Shooting.started -= (x) => StartCoroutine(Shooting());
-
-        controls.Tank.Movement.started -= ChangingDirection;
-        controls.Tank.Movement.canceled -= (x) => DirectionVector = Vector2.zero;
-
-        controls.Tank.Disable();
+        if (controls.Tank.Movement.activeControl != null) rb.velocity = DirectionVector * speed;
     }
 
-    void Update()
-    {
-        rb.velocity = DirectionVector * speed;
-    }
-
-    private void ChangingDirection(CallbackContext contex)
+    private void ChangingDirection(CallbackContext context)
     {
         switch(controls.Tank.Movement.activeControl.name)
         {
@@ -81,7 +70,8 @@ public class PlayerController : MonoBehaviour
             IsShooting = true;
             while (controls.Tank.Shooting.activeControl != null)
             {
-                Instantiate(projectile, transform.position, transform.rotation);
+                var size = GetComponent<Collider2D>().bounds.size.x;
+                Instantiate(projectile, (Vector2)transform.position + DirectionVector, transform.rotation);
                 yield return new WaitForSeconds(reload);
             }
             IsShooting = false;
