@@ -9,10 +9,21 @@ public class PlayerController : MonoBehaviour
     private float speed = 1f;
     [SerializeField]
     private float reload = 1f;
+    private bool IsShooting = false;
+
+    private Vector2 DirectionVector;
+
+    [SerializeField]
+    private Object projectile;
+
+    Rigidbody2D rb;
+
 
     private void Awake()
     {
         controls = new TankControls();
+
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void OnEnable()
@@ -20,32 +31,63 @@ public class PlayerController : MonoBehaviour
         controls.Tank.Enable();
 
         controls.Tank.Shooting.started += (x) => StartCoroutine(Shooting());
+
+        controls.Tank.Movement.started += ChangingDirection;
+        controls.Tank.Movement.canceled += (x) => DirectionVector = Vector2.zero;
     }
 
     private void OnDisable()
     {
         controls.Tank.Shooting.started -= (x) => StartCoroutine(Shooting());
 
+        controls.Tank.Movement.started -= ChangingDirection;
+        controls.Tank.Movement.canceled -= (x) => DirectionVector = Vector2.zero;
+
         controls.Tank.Disable();
     }
 
     void Update()
     {
-        var axis = controls.Tank.Movement.ReadValue<Vector2>();
+        rb.velocity = DirectionVector * speed;
+    }
 
-        transform.Translate(new Vector2(axis.x, axis.y) * speed * Time.deltaTime, Space.Self);
+    private void ChangingDirection(CallbackContext contex)
+    {
+        switch(controls.Tank.Movement.activeControl.name)
+        {
+            case "w":
+                transform.rotation = Quaternion.AngleAxis(0, Vector3.forward);
+                DirectionVector = Vector2.up;
+                break;
+            case "s":
+                transform.rotation = Quaternion.AngleAxis(180, Vector3.forward);
+                DirectionVector = Vector2.down;
+                break;
+            case "a":
+                transform.rotation = Quaternion.AngleAxis(90, Vector3.forward);
+                DirectionVector = Vector2.left;
+                break;
+            case "d":
+                transform.rotation = Quaternion.AngleAxis(-90, Vector3.forward);
+                DirectionVector = Vector2.right;
+                break;
+        }
     }
 
     private IEnumerator Shooting()
     {
-        var activeControl = controls.Tank.Shooting.activeControl;
-
-        while (activeControl != null)
+        if (!IsShooting)
         {
-            //Логика создания снаряда
-            Debug.Log("Fire");
-            yield return new WaitForSeconds(reload);
+            IsShooting = true;
+            while (controls.Tank.Shooting.activeControl != null)
+            {
+                Instantiate(projectile, transform.position, transform.rotation);
+                yield return new WaitForSeconds(reload);
+            }
+            IsShooting = false;
+            yield break;
         }
-        yield break;
+        else
+            yield break;
     }
 }
