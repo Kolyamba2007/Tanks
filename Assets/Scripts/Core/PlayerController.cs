@@ -2,12 +2,14 @@
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Collider2D))]
 public class PlayerController : MonoBehaviour
 {
     private TankControls controls;
-    [SerializeField]
+    [SerializeField, Range(0, 5)]
     private float speed = 1f;
-    [SerializeField]
+    [SerializeField, Min(0)]
     private float reload = 1f;
 
     private void Awake()
@@ -21,7 +23,6 @@ public class PlayerController : MonoBehaviour
 
         controls.Tank.Shooting.started += (x) => StartCoroutine(Shooting());
     }
-
     private void OnDisable()
     {
         controls.Tank.Shooting.started -= (x) => StartCoroutine(Shooting());
@@ -29,7 +30,7 @@ public class PlayerController : MonoBehaviour
         controls.Tank.Disable();
     }
 
-    void Update()
+    private void Update()
     {
         var axis = controls.Tank.Movement.ReadValue<Vector2>();
 
@@ -38,9 +39,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator Shooting()
     {
-        var activeControl = controls.Tank.Shooting.activeControl;
-
-        while (activeControl != null)
+        while (controls.Tank.Shooting.activeControl != null)
         {
             //Логика создания снаряда
             Debug.Log("Fire");

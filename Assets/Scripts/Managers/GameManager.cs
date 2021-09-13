@@ -1,18 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private byte BotsCount { set; get; }
+
+    [Header("Game Options"), SerializeField]
+    private byte _botsLimit;
+
+    [Header("Prefabs"), SerializeField]
+    private GameObject _enemyPrefab;
+
+    [SerializeField]
+    private Transform[] _spawns;
+
+    private void Start()
     {
-        
+        SpawnEnemy();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnemyDied()
     {
-        
+        BotsCount--;
+    }
+    private void OnPlayerDied()
+    {
+
+    }
+
+    private Vector2 GetRandomSpawn() => _spawns[Random.Range(0, _spawns.Length)].position;
+    private bool SpawnEnemy()
+    {
+        if (BotsCount >= _botsLimit) return false;
+        Instantiate(_enemyPrefab, GetRandomSpawn(), Quaternion.identity);
+        BotsCount++;
+        return true;
     }
 }
