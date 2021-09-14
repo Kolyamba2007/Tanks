@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -16,10 +16,11 @@ public abstract class BaseTank : MonoBehaviour
     [SerializeField]
     private UnityEngine.Object _projectile;
 
-    private bool CanShoot = true;
+    protected bool CanShoot { private set; get; } = true;
 
     private Vector2 DirectionVector { set; get; } = Vector2.up;   
     private Rigidbody2D Rigidbody { set; get; }
+    protected DirectionType Direction { private set; get; }
 
     public event Action RecievedDamage;
     public event Action Died;
@@ -38,6 +39,7 @@ public abstract class BaseTank : MonoBehaviour
         ResetVelocity();
         GetComponent<Collider2D>().enabled = false;
         Rigidbody.isKinematic = true;
+        Rigidbody.simulated = false;
     }
 
     public void Hit()
@@ -60,19 +62,19 @@ public abstract class BaseTank : MonoBehaviour
     {
         switch (direction)
         {
-            case Direction.Up:
+            case DirectionType.Up:
                 transform.rotation = Quaternion.AngleAxis(0, Vector3.forward);
                 DirectionVector = Vector2.up;
                 break;
-            case Direction.Down:
+            case DirectionType.Down:
                 transform.rotation = Quaternion.AngleAxis(180, Vector3.forward);
                 DirectionVector = Vector2.down;
                 break;
-            case Direction.Left:
+            case DirectionType.Left:
                 transform.rotation = Quaternion.AngleAxis(90, Vector3.forward);
                 DirectionVector = Vector2.left;
                 break;
-            case Direction.Right:
+            case DirectionType.Right:
                 transform.rotation = Quaternion.AngleAxis(-90, Vector3.forward);
                 DirectionVector = Vector2.right;
                 break;
@@ -80,6 +82,7 @@ public abstract class BaseTank : MonoBehaviour
                 Rigidbody.velocity = Vector2.zero;
                 return;
         }
+        Direction = direction;
         Rigidbody.velocity = DirectionVector * _speed;
     }
     protected void ResetVelocity() => Rigidbody.velocity = Vector2.zero;
@@ -87,7 +90,8 @@ public abstract class BaseTank : MonoBehaviour
     {
         if (CanShoot)
         {
-            var projectile = Instantiate(_projectile, (Vector2)transform.position + DirectionVector * 0.5f, transform.rotation);
+            float size = GetComponent<Collider2D>().bounds.size.x * 0.7f;
+            var projectile = Instantiate(_projectile, (Vector2)transform.position + DirectionVector * size, transform.rotation);
             bool isPlayer = this is PlayerController;
             (projectile as GameObject).GetComponent<Projectile>().SetOwner(isPlayer ? Projectile.Owner.Player : Projectile.Owner.Enemy);
             StartCoroutine(Reload());
