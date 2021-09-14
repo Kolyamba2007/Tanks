@@ -14,32 +14,26 @@ public class PlayerController : BaseTank
         base.OnEnable();
         controls.Tank.Enable();
         controls.Tank.Shooting.started += _ => Shoot();
-        controls.Tank.Movement.canceled += _ => ResetVelocity();
-        controls.Tank.Movement.started += OnChangeDirection;
+
+        controls.Tank.Up.started += _ => ChangeDirection(Direction.Up);
+        controls.Tank.Down.started += _ => ChangeDirection(Direction.Down);
+        controls.Tank.Left.started += _ => ChangeDirection(Direction.Left);
+        controls.Tank.Right.started += _ => ChangeDirection(Direction.Right);
+
+        controls.Tank.Up.canceled += _ => ZeroState();
+        controls.Tank.Down.canceled += _ => ZeroState();
+        controls.Tank.Left.canceled += _ => ZeroState();
+        controls.Tank.Right.canceled += _ => ZeroState();
     }
     protected override void Disable()
     {
         base.Disable();
-        controls.Disable();
-        controls.Tank.Movement.started -= OnChangeDirection;
+        controls.Tank.Disable();
     }
 
-    private void OnChangeDirection(CallbackContext context)
+    private void ZeroState()
     {
-        switch (context.control.name)
-        {
-            case "w":
-                ChangeDirection(Direction.Up);
-                break;
-            case "s":
-                ChangeDirection(Direction.Down);
-                break;
-            case "a":
-                ChangeDirection(Direction.Left);
-                break;
-            case "d":
-                ChangeDirection(Direction.Right);
-                break;
-        }
+        if (!(controls.Tank.Up.inProgress || controls.Tank.Down.inProgress || controls.Tank.Left.inProgress || controls.Tank.Right.inProgress))
+            ChangeDirection(Direction.Zero);
     }
 }
