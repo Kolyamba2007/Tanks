@@ -169,5 +169,5 @@ MonoBehaviour:
   _reload: 1
   _projectile: {fileID: 6052171043563768179, guid: ced489f0f148daf468fe5afdb9107486,
     type: 3}
-  MovementIntervalMin: 0
-  MovementIntervalMax: 0
+  MovementIntervalMin: 4.1746244
+  MovementIntervalMax: 8.512962
