@@ -6,15 +6,6 @@
             "id": "50152279-b12f-4c7b-9857-cc90a82d2886",
             "actions": [
                 {
-                    "name": "Movement",
-                    "type": "PassThrough",
-                    "id": "45268582-826f-4d34-8e89-2e81e22b93e9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Shooting",
                     "type": "Button",
                     "id": "3707c9f7-fa8f-4ae5-a796-4189583d0ec3",
@@ -69,50 +60,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Shooting",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "60506180-8605-4211-964a-5bbcbd241a5c",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "22a5d296-2f51-426e-8e63-6982df6db825",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8c983be6-f527-481a-8b9d-ea345fe02ced",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8f55cf88-2e1c-4396-bd46-011c00a9c3a5",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
