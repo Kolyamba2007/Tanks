@@ -4,7 +4,6 @@
 [RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
-    private int Layer;
     public enum Owner { Player, Enemy }
 
     [SerializeField]
@@ -16,7 +15,6 @@ public class Projectile : MonoBehaviour
 
     private void Start()
     {
-        Layer = LayerMask.NameToLayer("Tanks");
         GetComponent<Collider2D>().isTrigger = true;
         Destroy(transform.gameObject, _lifetime);
     }
@@ -29,7 +27,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.layer == Layer)
+        if (collider.gameObject.layer == 8)
         {
             if (_owner.ToString() != collider.tag)
             {

@@ -29,16 +29,16 @@ public class PlayerController : BaseTank
         switch (context.control.name)
         {
             case "w":
-                ChangeDirection(Direction.Up);
+                ChangeDirection(DirectionType.Up);
                 break;
             case "s":
-                ChangeDirection(Direction.Down);
+                ChangeDirection(DirectionType.Down);
                 break;
             case "a":
-                ChangeDirection(Direction.Left);
+                ChangeDirection(DirectionType.Left);
                 break;
             case "d":
-                ChangeDirection(Direction.Right);
+                ChangeDirection(DirectionType.Right);
                 break;
         }
     }
