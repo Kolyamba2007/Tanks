@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //SpawnEnemy();
+        SpawnEnemy();
     }
 
     private void OnEnemyDied()
@@ -32,7 +32,11 @@ public class GameManager : MonoBehaviour
     private bool SpawnEnemy()
     {
         if (BotsCount >= _botsLimit) return false;
-        Instantiate(_enemyPrefab, GetRandomSpawn(), Quaternion.identity);
+        var tank = Instantiate(_enemyPrefab, GetRandomSpawn(), Quaternion.identity);
+        var component = tank.GetComponent<BaseTank>();
+
+        component.Died += OnEnemyDied;
+
         BotsCount++;
         return true;
     }

@@ -8,6 +8,8 @@ public class EnemyControllerLayout : Editor
 {
     private EnemyController Target;
 
+    private readonly float _intervalMin = 1f;
+    private readonly float _intervalMax = 10f;
     private readonly GUIContent _movementIntervalContent = new GUIContent("Movement Interval");
 
     private void OnEnable()
@@ -24,7 +26,14 @@ public class EnemyControllerLayout : Editor
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Bot Options", EditorStyles.boldLabel);
-        EditorGUILayout.MinMaxSlider(_movementIntervalContent, ref Target.MovementIntervalMin, ref Target.MovementIntervalMax, 1, 10f);
+
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.PrefixLabel(" ");
+        EditorGUILayout.LabelField(_intervalMin.ToString());
+        EditorGUILayout.LabelField(_intervalMax.ToString(), GUILayout.MaxWidth(15));
+        EditorGUILayout.EndHorizontal();     
+        
+        EditorGUILayout.MinMaxSlider(_movementIntervalContent, ref Target.MovementIntervalMin, ref Target.MovementIntervalMax, _intervalMin, _intervalMax);
         serializedObject.ApplyModifiedProperties();        
     }
 }

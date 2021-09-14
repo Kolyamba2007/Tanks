@@ -5,6 +5,7 @@ public class GUIIcon : MonoBehaviour
     [SerializeField]
     private Sprite _icon;
     private Vector2 Size => Vector3.one;
+
     private void OnDrawGizmos()
     {
         if (_icon != null)
