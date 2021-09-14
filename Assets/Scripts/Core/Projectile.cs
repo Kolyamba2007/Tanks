@@ -4,23 +4,33 @@
 [RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
+    public enum Owner { Player, Enemy }
+
     [SerializeField]
     private float _lifetime;
     [SerializeField]
     private float _speed = 8;
 
+    private Owner _owner;
+
     private void Start()
     {
+        GetComponent<Collider2D>().isTrigger = true;
         Destroy(transform.gameObject, _lifetime);
     }
-
     private void Update()
     {
         transform.Translate(Vector2.up * _speed * Time.deltaTime, Space.Self);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void SetOwner(Owner owner) => _owner = owner;
+
+    private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (_owner.ToString() != collider.tag)
+        {
+
+        }
         Destroy(gameObject);
     }
 }
