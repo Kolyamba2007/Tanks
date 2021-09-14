@@ -13,7 +13,7 @@ public class EnemyController : BaseTank
     }
     private void LateUpdate()
     {
-        if (CanShoot) Shoot();
+        if (!Dead && CanShoot) Shoot();
     }
 
     private void ChangeDirection()

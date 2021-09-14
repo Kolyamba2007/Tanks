@@ -10,12 +10,10 @@ public class Projectile : MonoBehaviour
     private float _lifetime;
     [SerializeField]
     private float _speed = 8;
-
     private Owner _owner;
 
     private void Start()
     {
-        GetComponent<Collider2D>().isTrigger = true;
         Destroy(transform.gameObject, _lifetime);
     }
     private void Update()
@@ -25,13 +23,13 @@ public class Projectile : MonoBehaviour
 
     public void SetOwner(Owner owner) => _owner = owner;
 
-    private void OnTriggerEnter2D(Collider2D collider)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collider.gameObject.layer == 8)
+        if (collision.gameObject.layer == 8)
         {
-            if (_owner.ToString() != collider.tag)
+            if (_owner.ToString() != collision.transform.tag)
             {
-                collider.GetComponent<BaseTank>().Hit();
+                collision.gameObject.GetComponent<BaseTank>().Hit();
             }
         }
         Destroy(gameObject);

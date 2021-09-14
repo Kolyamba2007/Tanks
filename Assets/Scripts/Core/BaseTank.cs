@@ -17,6 +17,7 @@ public abstract class BaseTank : MonoBehaviour
     private UnityEngine.Object _projectile;
 
     protected bool CanShoot { private set; get; } = true;
+    public bool Dead => _health == 0;
 
     private Vector2 DirectionVector { set; get; } = Vector2.up;   
     private Rigidbody2D Rigidbody { set; get; }
@@ -35,6 +36,7 @@ public abstract class BaseTank : MonoBehaviour
     }
     protected virtual void Disable()
     {
+        StopAllCoroutines();
         CanShoot = false;
         ResetVelocity();
         GetComponent<Collider2D>().enabled = false;
@@ -54,12 +56,14 @@ public abstract class BaseTank : MonoBehaviour
             _health = 0;
             Disable();
             Died?.Invoke();
+            Destroy(gameObject);
         }
     }
 
     protected enum DirectionType { Up, Down, Left, Right, Zero }
     protected void ChangeDirection(DirectionType direction)
     {
+        if (Dead) return;
         switch (direction)
         {
             case DirectionType.Up:
@@ -88,14 +92,13 @@ public abstract class BaseTank : MonoBehaviour
     protected void ResetVelocity() => Rigidbody.velocity = Vector2.zero;
     protected void Shoot()
     {
-        if (CanShoot)
-        {
-            float size = GetComponent<Collider2D>().bounds.size.x * 0.7f;
-            var projectile = Instantiate(_projectile, (Vector2)transform.position + DirectionVector * size, transform.rotation);
-            bool isPlayer = this is PlayerController;
-            (projectile as GameObject).GetComponent<Projectile>().SetOwner(isPlayer ? Projectile.Owner.Player : Projectile.Owner.Enemy);
-            StartCoroutine(Reload());
-        }
+        if (Dead) return;
+
+        float size = GetComponent<Collider2D>().bounds.size.x * 0.7f;
+        var projectile = Instantiate(_projectile, (Vector2)transform.position + DirectionVector * size, transform.rotation);
+        bool isPlayer = this is PlayerController;
+        (projectile as GameObject).GetComponent<Projectile>().SetOwner(isPlayer ? Projectile.Owner.Player : Projectile.Owner.Enemy);
+        StartCoroutine(Reload());
     }
 
     private IEnumerator Reload()
