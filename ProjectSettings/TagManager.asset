@@ -15,7 +15,7 @@ TagManager:
   - 
   - 
   - Tanks
-  - 
+  - Environment
   - 
   - 
   - 
@@ -41,7 +41,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Obstacle
-    uniqueID: 2052213223
     locked: 0
