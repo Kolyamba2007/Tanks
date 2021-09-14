@@ -15,10 +15,10 @@ public class PlayerController : BaseTank
         controls.Tank.Enable();
         controls.Tank.Shooting.started += _ => Shoot();
 
-        controls.Tank.Up.started += _ => ChangeDirection(Direction.Up);
-        controls.Tank.Down.started += _ => ChangeDirection(Direction.Down);
-        controls.Tank.Left.started += _ => ChangeDirection(Direction.Left);
-        controls.Tank.Right.started += _ => ChangeDirection(Direction.Right);
+        controls.Tank.Up.started += _ => ChangeDirection(DirectionType.Up);
+        controls.Tank.Down.started += _ => ChangeDirection(DirectionType.Down);
+        controls.Tank.Left.started += _ => ChangeDirection(DirectionType.Left);
+        controls.Tank.Right.started += _ => ChangeDirection(DirectionType.Right);
 
         controls.Tank.Up.canceled += _ => ZeroState();
         controls.Tank.Down.canceled += _ => ZeroState();
@@ -34,6 +34,6 @@ public class PlayerController : BaseTank
     private void ZeroState()
     {
         if (!(controls.Tank.Up.inProgress || controls.Tank.Down.inProgress || controls.Tank.Left.inProgress || controls.Tank.Right.inProgress))
-            ChangeDirection(Direction.Zero);
+            ChangeDirection(DirectionType.Zero);
     }
 }

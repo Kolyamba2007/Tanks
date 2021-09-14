@@ -57,8 +57,8 @@ public abstract class BaseTank : MonoBehaviour
         }
     }
 
-    protected enum Direction { Up, Down, Left, Right, Zero }
-    protected void ChangeDirection(Direction direction)
+    protected enum DirectionType { Up, Down, Left, Right, Zero }
+    protected void ChangeDirection(DirectionType direction)
     {
         switch (direction)
         {
@@ -78,7 +78,7 @@ public abstract class BaseTank : MonoBehaviour
                 transform.rotation = Quaternion.AngleAxis(-90, Vector3.forward);
                 DirectionVector = Vector2.right;
                 break;
-            case Direction.Zero:
+            case DirectionType.Zero:
                 Rigidbody.velocity = Vector2.zero;
                 return;
         }
