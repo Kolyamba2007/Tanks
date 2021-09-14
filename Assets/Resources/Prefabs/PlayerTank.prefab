@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2240694208945524444}
   - component: {fileID: -7653949829449776354}
   - component: {fileID: 4126795121944459850}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PlayerTank
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af3cc3c823062547bf5d4ae3eed3edb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _health: 3
   _speed: 2
   _reload: 1
   _projectile: {fileID: 6052171043563768179, guid: ced489f0f148daf468fe5afdb9107486,

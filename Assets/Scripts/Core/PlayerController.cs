@@ -16,8 +16,14 @@ public class PlayerController : BaseTank
         controls.Tank.Shooting.started += _ => Shoot();
         controls.Tank.Movement.canceled += _ => ResetVelocity();
         controls.Tank.Movement.started += OnChangeDirection;
-    }   
-    
+    }
+    protected override void Disable()
+    {
+        base.Disable();
+        controls.Disable();
+        controls.Tank.Movement.started -= OnChangeDirection;
+    }
+
     private void OnChangeDirection(CallbackContext context)
     {
         switch (context.control.name)

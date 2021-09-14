@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        SpawnEnemy();
+        //SpawnEnemy();
     }
 
     private void OnEnemyDied()

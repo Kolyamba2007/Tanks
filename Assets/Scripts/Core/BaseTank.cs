@@ -1,20 +1,28 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(Rigidbody2D))]
 public abstract class BaseTank : MonoBehaviour
 {
     [Header("Tank Options")]
-    [SerializeField, Min(0)]
+    [SerializeField]
+    private byte _health = 1;
+    [SerializeField, Range(0, 5f)]
     private float _speed = 2f;
     [SerializeField, Min(0)]
     private float _reload = 1f;
     [SerializeField]
-    private Object _projectile;
+    private UnityEngine.Object _projectile;
 
-    private bool IsShooting = false;
+    private bool CanShoot = true;
 
     private Vector2 DirectionVector { set; get; } = Vector2.up;   
     private Rigidbody2D Rigidbody { set; get; }
+
+    public event Action RecievedDamage;
+    public event Action Died;
 
     protected virtual void Awake()
     {
@@ -23,6 +31,28 @@ public abstract class BaseTank : MonoBehaviour
     protected virtual void OnEnable()
     {
 
+    }
+    protected virtual void Disable()
+    {
+        CanShoot = false;
+        ResetVelocity();
+        GetComponent<Collider2D>().enabled = false;
+        Rigidbody.isKinematic = true;
+    }
+
+    public void Hit()
+    {
+        if (_health - 1 > 0)
+        {
+            _health--;
+            RecievedDamage?.Invoke();
+        }
+        else
+        {
+            _health = 0;
+            Disable();
+            Died?.Invoke();
+        }
     }
 
     protected enum Direction { Up, Down, Left, Right }
@@ -52,24 +82,19 @@ public abstract class BaseTank : MonoBehaviour
     protected void ResetVelocity() => Rigidbody.velocity = Vector2.zero;
     protected void Shoot()
     {
-        StartCoroutine(Shooting());
+        if (CanShoot)
+        {
+            var projectile = Instantiate(_projectile, (Vector2)transform.position + DirectionVector * 0.5f, transform.rotation);
+            bool isPlayer = this is PlayerController;
+            (projectile as GameObject).GetComponent<Projectile>().SetOwner(isPlayer ? Projectile.Owner.Player : Projectile.Owner.Enemy);
+            StartCoroutine(Reload());
+        }
     }
 
-    private IEnumerator Shooting()
+    private IEnumerator Reload()
     {
-        if (!IsShooting)
-        {
-            IsShooting = true;
-            //while (controls.Tank.Shooting.activeControl != null)
-            //{
-            //    var size = GetComponent<Collider2D>().bounds.size.x;
-            //    Instantiate(_projectile, (Vector2)transform.position + DirectionVector, transform.rotation);
-            //    yield return new WaitForSeconds(_reload);
-            //}
-            IsShooting = false;
-            yield break;
-        }
-        else
-            yield break;
-    } 
+        CanShoot = false;
+        yield return new WaitForSeconds(_reload);
+        CanShoot = true;
+    }
 }
