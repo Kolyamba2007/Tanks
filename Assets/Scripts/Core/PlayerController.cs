@@ -1,83 +1,39 @@
-﻿using System.Collections;
-using UnityEngine;
-using static UnityEngine.InputSystem.InputAction;
+﻿using static UnityEngine.InputSystem.InputAction;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : BaseTank
 {
     private TankControls controls;
-    [SerializeField]
-    private float speed = 1f;
-    [SerializeField]
-    private float reload = 1f;
-    private bool IsShooting = false;
 
-    private Vector2 DirectionVector = Vector2.up;
-
-    [SerializeField]
-    private Object projectile;
-
-    Rigidbody2D rb;
-
-
-    private void Awake()
-    {       
+    protected override void Awake()
+    {
+        base.Awake();
         controls = new TankControls();
-
-        rb = GetComponent<Rigidbody2D>();
     }
-
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         controls.Tank.Enable();
-
-        controls.Tank.Shooting.started += _ => StartCoroutine(Shooting());
-        controls.Tank.Movement.canceled += _ => rb.velocity = Vector2.zero;
-        controls.Tank.Movement.started += ChangingDirection;
-    }
-
-    private void Update()
+        controls.Tank.Shooting.started += _ => Shoot();
+        controls.Tank.Movement.canceled += _ => ResetVelocity();
+        controls.Tank.Movement.started += OnChangeDirection;
+    }   
+    
+    private void OnChangeDirection(CallbackContext context)
     {
-        if (controls.Tank.Movement.activeControl != null) rb.velocity = DirectionVector * speed;
-    }
-
-    private void ChangingDirection(CallbackContext context)
-    {
-        switch(controls.Tank.Movement.activeControl.name)
+        switch (context.control.name)
         {
             case "w":
-                transform.rotation = Quaternion.AngleAxis(0, Vector3.forward);
-                DirectionVector = Vector2.up;
+                ChangeDirection(Direction.Up);
                 break;
             case "s":
-                transform.rotation = Quaternion.AngleAxis(180, Vector3.forward);
-                DirectionVector = Vector2.down;
+                ChangeDirection(Direction.Down);
                 break;
             case "a":
-                transform.rotation = Quaternion.AngleAxis(90, Vector3.forward);
-                DirectionVector = Vector2.left;
+                ChangeDirection(Direction.Left);
                 break;
             case "d":
-                transform.rotation = Quaternion.AngleAxis(-90, Vector3.forward);
-                DirectionVector = Vector2.right;
+                ChangeDirection(Direction.Right);
                 break;
         }
-    }
-
-    private IEnumerator Shooting()
-    {
-        if (!IsShooting)
-        {
-            IsShooting = true;
-            while (controls.Tank.Shooting.activeControl != null)
-            {
-                var size = GetComponent<Collider2D>().bounds.size.x;
-                Instantiate(projectile, (Vector2)transform.position + DirectionVector, transform.rotation);
-                yield return new WaitForSeconds(reload);
-            }
-            IsShooting = false;
-            yield break;
-        }
-        else
-            yield break;
     }
 }

@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : BaseTank
 {
-    
+    [Header("Bot Options")]
+    [SerializeField, Min(0)]
+    private float _movementTime = 2f;
 }
