@@ -28,18 +28,45 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
             ""id"": ""50152279-b12f-4c7b-9857-cc90a82d2886"",
             ""actions"": [
                 {
-                    ""name"": ""Movement"",
-                    ""type"": ""Button"",
-                    ""id"": ""45268582-826f-4d34-8e89-2e81e22b93e9"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""Shooting"",
                     ""type"": ""Button"",
                     ""id"": ""3707c9f7-fa8f-4ae5-a796-4189583d0ec3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Up"",
+                    ""type"": ""Button"",
+                    ""id"": ""293db0a2-9c8d-4b61-a4bf-857e758eb69a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""ba0a5f1b-81e5-427a-a938-bfe84c077d82"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""8223e9fb-94c7-478d-912f-ac1a818cb52b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""c9567cc1-d8cf-4f7a-b885-81fe57b9d79e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -60,45 +87,45 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""60506180-8605-4211-964a-5bbcbd241a5c"",
+                    ""id"": ""526f26be-2471-45b6-a25f-cc21ec097e11"",
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""Up"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""22a5d296-2f51-426e-8e63-6982df6db825"",
+                    ""id"": ""e4ac8115-2c89-4b78-9466-bdc2d25f1905"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""Down"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8c983be6-f527-481a-8b9d-ea345fe02ced"",
+                    ""id"": ""df26a2da-53f2-40e2-8b5f-3f515a04b2c8"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""Left"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8f55cf88-2e1c-4396-bd46-011c00a9c3a5"",
+                    ""id"": ""86057e74-7a3c-41f2-99e3-8b9aaddb8565"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -109,8 +136,11 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
 }");
         // Tank
         m_Tank = asset.FindActionMap("Tank", throwIfNotFound: true);
-        m_Tank_Movement = m_Tank.FindAction("Movement", throwIfNotFound: true);
         m_Tank_Shooting = m_Tank.FindAction("Shooting", throwIfNotFound: true);
+        m_Tank_Up = m_Tank.FindAction("Up", throwIfNotFound: true);
+        m_Tank_Down = m_Tank.FindAction("Down", throwIfNotFound: true);
+        m_Tank_Left = m_Tank.FindAction("Left", throwIfNotFound: true);
+        m_Tank_Right = m_Tank.FindAction("Right", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -170,14 +200,20 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
     // Tank
     private readonly InputActionMap m_Tank;
     private ITankActions m_TankActionsCallbackInterface;
-    private readonly InputAction m_Tank_Movement;
     private readonly InputAction m_Tank_Shooting;
+    private readonly InputAction m_Tank_Up;
+    private readonly InputAction m_Tank_Down;
+    private readonly InputAction m_Tank_Left;
+    private readonly InputAction m_Tank_Right;
     public struct TankActions
     {
         private @TankControls m_Wrapper;
         public TankActions(@TankControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_Tank_Movement;
         public InputAction @Shooting => m_Wrapper.m_Tank_Shooting;
+        public InputAction @Up => m_Wrapper.m_Tank_Up;
+        public InputAction @Down => m_Wrapper.m_Tank_Down;
+        public InputAction @Left => m_Wrapper.m_Tank_Left;
+        public InputAction @Right => m_Wrapper.m_Tank_Right;
         public InputActionMap Get() { return m_Wrapper.m_Tank; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -187,29 +223,50 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_TankActionsCallbackInterface != null)
             {
-                @Movement.started -= m_Wrapper.m_TankActionsCallbackInterface.OnMovement;
-                @Movement.performed -= m_Wrapper.m_TankActionsCallbackInterface.OnMovement;
-                @Movement.canceled -= m_Wrapper.m_TankActionsCallbackInterface.OnMovement;
                 @Shooting.started -= m_Wrapper.m_TankActionsCallbackInterface.OnShooting;
                 @Shooting.performed -= m_Wrapper.m_TankActionsCallbackInterface.OnShooting;
                 @Shooting.canceled -= m_Wrapper.m_TankActionsCallbackInterface.OnShooting;
+                @Up.started -= m_Wrapper.m_TankActionsCallbackInterface.OnUp;
+                @Up.performed -= m_Wrapper.m_TankActionsCallbackInterface.OnUp;
+                @Up.canceled -= m_Wrapper.m_TankActionsCallbackInterface.OnUp;
+                @Down.started -= m_Wrapper.m_TankActionsCallbackInterface.OnDown;
+                @Down.performed -= m_Wrapper.m_TankActionsCallbackInterface.OnDown;
+                @Down.canceled -= m_Wrapper.m_TankActionsCallbackInterface.OnDown;
+                @Left.started -= m_Wrapper.m_TankActionsCallbackInterface.OnLeft;
+                @Left.performed -= m_Wrapper.m_TankActionsCallbackInterface.OnLeft;
+                @Left.canceled -= m_Wrapper.m_TankActionsCallbackInterface.OnLeft;
+                @Right.started -= m_Wrapper.m_TankActionsCallbackInterface.OnRight;
+                @Right.performed -= m_Wrapper.m_TankActionsCallbackInterface.OnRight;
+                @Right.canceled -= m_Wrapper.m_TankActionsCallbackInterface.OnRight;
             }
             m_Wrapper.m_TankActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Movement.started += instance.OnMovement;
-                @Movement.performed += instance.OnMovement;
-                @Movement.canceled += instance.OnMovement;
                 @Shooting.started += instance.OnShooting;
                 @Shooting.performed += instance.OnShooting;
                 @Shooting.canceled += instance.OnShooting;
+                @Up.started += instance.OnUp;
+                @Up.performed += instance.OnUp;
+                @Up.canceled += instance.OnUp;
+                @Down.started += instance.OnDown;
+                @Down.performed += instance.OnDown;
+                @Down.canceled += instance.OnDown;
+                @Left.started += instance.OnLeft;
+                @Left.performed += instance.OnLeft;
+                @Left.canceled += instance.OnLeft;
+                @Right.started += instance.OnRight;
+                @Right.performed += instance.OnRight;
+                @Right.canceled += instance.OnRight;
             }
         }
     }
     public TankActions @Tank => new TankActions(this);
     public interface ITankActions
     {
-        void OnMovement(InputAction.CallbackContext context);
         void OnShooting(InputAction.CallbackContext context);
+        void OnUp(InputAction.CallbackContext context);
+        void OnDown(InputAction.CallbackContext context);
+        void OnLeft(InputAction.CallbackContext context);
+        void OnRight(InputAction.CallbackContext context);
     }
 }

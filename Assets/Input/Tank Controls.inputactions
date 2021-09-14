@@ -6,18 +6,45 @@
             "id": "50152279-b12f-4c7b-9857-cc90a82d2886",
             "actions": [
                 {
-                    "name": "Movement",
-                    "type": "Button",
-                    "id": "45268582-826f-4d34-8e89-2e81e22b93e9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Shooting",
                     "type": "Button",
                     "id": "3707c9f7-fa8f-4ae5-a796-4189583d0ec3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Up",
+                    "type": "Button",
+                    "id": "293db0a2-9c8d-4b61-a4bf-857e758eb69a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Down",
+                    "type": "Button",
+                    "id": "ba0a5f1b-81e5-427a-a938-bfe84c077d82",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Left",
+                    "type": "Button",
+                    "id": "8223e9fb-94c7-478d-912f-ac1a818cb52b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Right",
+                    "type": "Button",
+                    "id": "c9567cc1-d8cf-4f7a-b885-81fe57b9d79e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -38,45 +65,45 @@
                 },
                 {
                     "name": "",
-                    "id": "60506180-8605-4211-964a-5bbcbd241a5c",
+                    "id": "526f26be-2471-45b6-a25f-cc21ec097e11",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Up",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "22a5d296-2f51-426e-8e63-6982df6db825",
+                    "id": "e4ac8115-2c89-4b78-9466-bdc2d25f1905",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Down",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "8c983be6-f527-481a-8b9d-ea345fe02ced",
+                    "id": "df26a2da-53f2-40e2-8b5f-3f515a04b2c8",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Left",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "8f55cf88-2e1c-4396-bd46-011c00a9c3a5",
+                    "id": "86057e74-7a3c-41f2-99e3-8b9aaddb8565",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Right",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
