@@ -34,6 +34,7 @@ public class EnemyControllerLayout : Editor
         EditorGUILayout.EndHorizontal();     
         
         EditorGUILayout.MinMaxSlider(_movementIntervalContent, ref Target.MovementIntervalMin, ref Target.MovementIntervalMax, _intervalMin, _intervalMax);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("ShowTracking"));
         serializedObject.ApplyModifiedProperties();        
     }
 }

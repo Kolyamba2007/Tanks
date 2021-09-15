@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        SpawnPlayer();
+       // SpawnPlayer();
         SpawnEnemy();
         SpawnEnemy();
         SpawnEnemy();
