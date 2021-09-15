@@ -171,4 +171,4 @@ MonoBehaviour:
     type: 3}
   MovementIntervalMin: 4.1746244
   MovementIntervalMax: 8.512962
-  ShowTraking: 1
+  ShowTracking: 0

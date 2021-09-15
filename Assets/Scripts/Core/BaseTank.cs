@@ -4,6 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
+[DisallowMultipleComponent]
 public abstract class BaseTank : MonoBehaviour
 {
     [Header("Tank Options")]
