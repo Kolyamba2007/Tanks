@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,12 +21,37 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject _playerPrefab;
 
+    #region Spawns
+    private struct Spawn
+    {
+        private bool _active;
+        public readonly int Index;
+        public readonly Vector2 Position;
+
+        public Spawn(int index, Vector2 position)
+        {
+            _active = true;
+            Index = index;
+            Position = position;
+        }
+
+        public bool IsActive => _active;
+        public void SetActive(bool isActive) => _active = isActive;
+    }
+
     [SerializeField]
     private Transform[] _spawns;
+    private List<Spawn> Spawns;
+    #endregion
 
+    private void Awake()
+    {
+        Spawns = new List<Spawn>(_spawns.Length);
+        for (int i = 0; i < _spawns.Length; i++) Spawns.Add(new Spawn(i, _spawns[i].position));
+    }
     private void Start()
     {
-       // SpawnPlayer();
+        SpawnPlayer();
         SpawnEnemy();
         SpawnEnemy();
         SpawnEnemy();
@@ -43,11 +69,20 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private Vector2 GetRandomSpawn() => _spawns[Random.Range(0, _spawns.Length)].position;
+    private Spawn GetRandomSpawn()
+    {
+        var spawn = Spawns[Random.Range(0, _spawns.Length)];
+        while (!spawn.IsActive) spawn = Spawns[Random.Range(0, _spawns.Length)];
+        spawn.SetActive(false);
+        return spawn;
+    }
     private bool SpawnEnemy()
     {
         if (BotsCount >= _botsLimit) return false;
-        var tank = Instantiate(_enemyPrefab, GetRandomSpawn(), Quaternion.identity);
+
+        var spawn = GetRandomSpawn();
+
+        var tank = Instantiate(_enemyPrefab, spawn.Position, Quaternion.identity);
         tank.transform.SetParent(GameObject.Find("[UNITS]").transform);
         var component = tank.GetComponent<BaseTank>();
 
@@ -59,7 +94,9 @@ public class GameManager : MonoBehaviour
     }
     private void SpawnPlayer()
     {
-        var tank = Instantiate(_playerPrefab, GetRandomSpawn(), Quaternion.identity);
+        var spawn = GetRandomSpawn();
+
+        var tank = Instantiate(_playerPrefab, spawn.Position, Quaternion.identity);
         tank.transform.SetParent(GameObject.Find("[UNITS]").transform);
         var component = tank.GetComponent<PlayerController>();
 
