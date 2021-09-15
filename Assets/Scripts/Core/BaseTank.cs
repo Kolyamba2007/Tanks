@@ -19,8 +19,8 @@ public abstract class BaseTank : MonoBehaviour
     protected bool CanShoot { private set; get; } = true;
     public bool Dead => _health == 0;
 
-    private Vector2 DirectionVector { set; get; } = Vector2.up;   
-    private Rigidbody2D Rigidbody { set; get; }
+    private Vector2 DirectionVector { set; get; } = Vector2.up;
+    protected Rigidbody2D Rigidbody { private set; get; }
     protected DirectionType Direction { private set; get; }
 
     public event Action RecievedDamage;
