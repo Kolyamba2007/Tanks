@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
     private uint Score { set; get; } = 0;
     private byte BotsCount { set; get; }
+    public static byte PlayerHealth { private set; get; }
 
     [Header("Managers")]
     [SerializeField]
@@ -55,6 +56,8 @@ public class GameManager : MonoBehaviour
         SpawnEnemy();
         SpawnEnemy();
         SpawnEnemy();
+
+        AudioManager.PlayAudioShot(AudioManager.GameAudio.LevelStart);
     }
 
     private void OnEnemyDied()
@@ -66,7 +69,14 @@ public class GameManager : MonoBehaviour
     }
     private void OnPlayerDied()
     {
-
+        UIManager.SetHealth(0);
+        AudioManager.PlayAudioShot(AudioManager.GameAudio.GameOver);
+    }
+    private void OnPlayerRecievedDamage(PlayerController player)
+    {
+        PlayerHealth = player.Health;
+        UIManager.SetHealth(PlayerHealth);
+        AudioManager.PlayAudioShot(AudioManager.TankAudio.Hit);
     }
 
     private Spawn GetRandomSpawn()
@@ -101,7 +111,7 @@ public class GameManager : MonoBehaviour
         var component = tank.GetComponent<PlayerController>();
 
         component.Died += OnPlayerDied;
-        component.RecievedDamage += () => AudioManager.PlayAudioShot(AudioManager.TankAudio.Hit);
+        component.RecievedDamage += () => OnPlayerRecievedDamage(component);
         component.Fire += () => AudioManager.PlayAudioShot(AudioManager.TankAudio.Shoot);
     }
 }
