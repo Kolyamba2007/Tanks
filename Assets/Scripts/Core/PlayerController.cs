@@ -1,19 +1,33 @@
 //using static UnityEngine.InputSystem.InputAction;
 
+using System;
+
 public class PlayerController : BaseTank
 {
     private TankControls controls;
+
+    public event Action Fire;
 
     protected override void Awake()
     {
         base.Awake();
         controls = new TankControls();
     }
+    private void Update()
+    {
+        if (Dead) return;
+
+        var isFire = controls.Tank.Shooting.IsPressed();
+        if (isFire && CanShoot)
+        {
+            Shoot();
+            Fire?.Invoke();
+        }
+    }
     protected override void OnEnable()
     {
         base.OnEnable();
         controls.Tank.Enable();
-        controls.Tank.Shooting.started += _ => Shoot();
 
         controls.Tank.Up.started += _ => ChangeDirection(DirectionType.Up);
         controls.Tank.Down.started += _ => ChangeDirection(DirectionType.Down);
