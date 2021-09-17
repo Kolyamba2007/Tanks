@@ -4,6 +4,7 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public enum TankAudio { Death, Hit, Shoot }
+    public enum GameAudio { LevelStart, GameOver }
 
     [SerializeField]
     private AudioClip _deathAudio;
@@ -11,6 +12,10 @@ public class AudioManager : MonoBehaviour
     private AudioClip _hitAudio;
     [SerializeField]
     private AudioClip _shootAudio;
+    [SerializeField]
+    private AudioClip _levelStartAudio;
+    [SerializeField]
+    private AudioClip _gameOverAudio;
 
     public void PlayAudioShot(TankAudio audio)
     {
@@ -26,6 +31,22 @@ public class AudioManager : MonoBehaviour
                 break;
             case TankAudio.Shoot:
                 audioSource.clip = _shootAudio;
+                break;
+        }
+        audioSource.Play();
+        StartCoroutine(AudioCoroutine(audioSource));
+    }
+    public void PlayAudioShot(GameAudio audio)
+    {
+        var source = new GameObject("[Audio Source]");
+        AudioSource audioSource = source.AddComponent<AudioSource>();
+        switch (audio)
+        {
+            case GameAudio.LevelStart:
+                audioSource.clip = _levelStartAudio;
+                break;
+            case GameAudio.GameOver:
+                audioSource.clip = _gameOverAudio;
                 break;
         }
         audioSource.Play();

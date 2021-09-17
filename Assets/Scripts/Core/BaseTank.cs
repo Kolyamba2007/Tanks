@@ -4,6 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
+[DisallowMultipleComponent]
 public abstract class BaseTank : MonoBehaviour
 {
     [Header("Tank Options")]
@@ -16,11 +17,13 @@ public abstract class BaseTank : MonoBehaviour
     [SerializeField]
     private UnityEngine.Object _projectile;
 
-    protected bool CanShoot { private set; get; } = true;
     public bool Dead => _health == 0;
+    protected bool CanShoot { private set; get; } = true;
 
-    private Vector2 DirectionVector { set; get; } = Vector2.up;   
-    private Rigidbody2D Rigidbody { set; get; }
+    public byte Health => _health;
+
+    private Vector2 DirectionVector { set; get; } = Vector2.up;
+    protected Rigidbody2D Rigidbody { private set; get; }
     protected DirectionType Direction { private set; get; }
 
     public event Action RecievedDamage;
