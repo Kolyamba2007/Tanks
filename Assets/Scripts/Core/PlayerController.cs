@@ -7,11 +7,13 @@ public class PlayerController : BaseTank
     private TankControls controls;
 
     public event Action Fire;
+    public event Action Pause;
 
     protected override void Awake()
     {
         base.Awake();
         controls = new TankControls();
+        controls.Tank.Pause.started += _ => Pause?.Invoke();
     }
     private void Update()
     {

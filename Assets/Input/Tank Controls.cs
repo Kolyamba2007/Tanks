@@ -71,6 +71,15 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""6fe8fecd-3706-45b0-afe4-e6cf023e7298"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -128,6 +137,17 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
                     ""action"": ""Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""661012f9-9324-4d2b-89fb-82abffab1c83"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -141,6 +161,7 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
         m_Tank_Down = m_Tank.FindAction("Down", throwIfNotFound: true);
         m_Tank_Left = m_Tank.FindAction("Left", throwIfNotFound: true);
         m_Tank_Right = m_Tank.FindAction("Right", throwIfNotFound: true);
+        m_Tank_Pause = m_Tank.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -205,6 +226,7 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Tank_Down;
     private readonly InputAction m_Tank_Left;
     private readonly InputAction m_Tank_Right;
+    private readonly InputAction m_Tank_Pause;
     public struct TankActions
     {
         private @TankControls m_Wrapper;
@@ -214,6 +236,7 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
         public InputAction @Down => m_Wrapper.m_Tank_Down;
         public InputAction @Left => m_Wrapper.m_Tank_Left;
         public InputAction @Right => m_Wrapper.m_Tank_Right;
+        public InputAction @Pause => m_Wrapper.m_Tank_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Tank; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -238,6 +261,9 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
                 @Right.started -= m_Wrapper.m_TankActionsCallbackInterface.OnRight;
                 @Right.performed -= m_Wrapper.m_TankActionsCallbackInterface.OnRight;
                 @Right.canceled -= m_Wrapper.m_TankActionsCallbackInterface.OnRight;
+                @Pause.started -= m_Wrapper.m_TankActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_TankActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_TankActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_TankActionsCallbackInterface = instance;
             if (instance != null)
@@ -257,6 +283,9 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
                 @Right.started += instance.OnRight;
                 @Right.performed += instance.OnRight;
                 @Right.canceled += instance.OnRight;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -268,5 +297,6 @@ public partial class @TankControls : IInputActionCollection2, IDisposable
         void OnDown(InputAction.CallbackContext context);
         void OnLeft(InputAction.CallbackContext context);
         void OnRight(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     private uint Score { set; get; } = 0;
     private byte BotsCount { set; get; }
+    private bool Paused { set; get; } = false;
     public static byte PlayerHealth { private set; get; }
 
     [Header("Managers")]
@@ -45,12 +49,22 @@ public class GameManager : MonoBehaviour
     private List<Spawn> Spawns;
     #endregion
 
+    #region Events
+    public static event Action GameOver;
+    public static event Action<bool> GamePaused;
+    #endregion
+
     private void Awake()
     {
         Spawns = new List<Spawn>(_spawns.Length);
         for (int i = 0; i < _spawns.Length; i++) Spawns.Add(new Spawn(i, _spawns[i].position));
     }
     private void Start()
+    {
+        OnGameStarted();
+    }
+
+    private void OnGameStarted()
     {
         SpawnPlayer();
         SpawnEnemy();
@@ -59,7 +73,6 @@ public class GameManager : MonoBehaviour
 
         AudioManager.PlayAudioShot(AudioManager.GameAudio.LevelStart);
     }
-
     private void OnEnemyDied()
     {
         BotsCount--;
@@ -69,8 +82,10 @@ public class GameManager : MonoBehaviour
     }
     private void OnPlayerDied()
     {
+        Pause(true);
         UIManager.SetHealth(0);
         AudioManager.PlayAudioShot(AudioManager.GameAudio.GameOver);
+        GameOver?.Invoke();
     }
     private void OnPlayerRecievedDamage(PlayerController player)
     {
@@ -81,11 +96,18 @@ public class GameManager : MonoBehaviour
 
     private Spawn GetRandomSpawn()
     {
-        var spawn = Spawns[Random.Range(0, _spawns.Length)];
-        while (!spawn.IsActive) spawn = Spawns[Random.Range(0, _spawns.Length)];
-        spawn.SetActive(false);
-        return spawn;
+        var index = UnityEngine.Random.Range(0, _spawns.Length);
+        while (!Spawns[index].IsActive) index = UnityEngine.Random.Range(0, _spawns.Length);
+        Spawns[index].SetActive(false);
+        StartCoroutine(SpawnCoroutine(index));
+        return Spawns[index];
     }
+    private IEnumerator SpawnCoroutine(int index)
+    {
+        yield return new WaitForSeconds(5f);
+        Spawns[index].SetActive(false);
+    }
+
     private bool SpawnEnemy()
     {
         if (BotsCount >= _botsLimit) return false;
@@ -113,5 +135,40 @@ public class GameManager : MonoBehaviour
         component.Died += OnPlayerDied;
         component.RecievedDamage += () => OnPlayerRecievedDamage(component);
         component.Fire += () => AudioManager.PlayAudioShot(AudioManager.TankAudio.Shoot);
+        component.Pause += () => Pause(!Paused);
     }
+    private void Pause(bool isPaused)
+    {
+        Paused = isPaused;
+        GamePaused?.Invoke(isPaused);
+        AudioManager.PlayAudioShot(AudioManager.GameAudio.Pause);
+        if (isPaused)
+        {
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
+    }
+
+    #region Unity Editor Buttons
+    public void Unpause_UnityEditor() => Pause(false);
+    public void Quit_UnityEditor()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+        Application.Quit();
+    }
+    public void LoadLevel_UnityEditor()
+    {
+        if (SceneManager.sceneCount > 1 && SceneManager.GetSceneAt(0) != null) SceneManager.LoadScene(0);
+    }
+    public void Restart_UnityEditor()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        OnGameStarted();
+    }
+    #endregion
 }
