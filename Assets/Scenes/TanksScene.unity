@@ -164,9 +164,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01ad001249c86ea4992da6831a7ff5c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameConfig: {fileID: 11400000, guid: 4b37e6e33a3e01947a4658a2b37e91a1, type: 2}
   AudioManager: {fileID: 169381988}
   UIManager: {fileID: 1666651403}
-  _botsLimit: 5
   _enemyPrefab: {fileID: 3797690959893193652, guid: 1f31fcffd5b0e8e48894cb13038185f2,
     type: 3}
   _playerPrefab: {fileID: 5511486596968471781, guid: d9b2f34be75d10342a3f50723f4eeea5,
@@ -1574,7 +1574,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 10968426}
-        m_MethodName: LoadLevel_UnityEditor
+        m_MethodName: BackToMainMenu_UnityEditor
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
