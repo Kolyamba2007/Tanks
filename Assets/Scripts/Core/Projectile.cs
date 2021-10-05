@@ -30,7 +30,9 @@ public class Projectile : MonoBehaviour
         {
             if (_owner.ToString() != collision.transform.tag)
             {
-                collision.gameObject.GetComponent<BaseTank>().Hit();
+                var component = collision.gameObject.GetComponent<BaseTank>();
+                component.Hit();
+                if (component is PlayerController) component.SetInvunlerable(3f);
             }
         }
         Destroy(gameObject);

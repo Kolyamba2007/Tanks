@@ -20,10 +20,11 @@ namespace Tanks.Units
         private UnityEngine.Object _projectile;
 
         public bool Dead => _health == 0;
+        public bool Invulnerable { private set; get; }
+        public byte Health => _health;
         protected bool CanShoot { private set; get; } = true;
 
-        public byte Health => _health;
-
+        private Renderer Renderer { set; get; }
         private Vector2 DirectionVector { set; get; } = Vector2.up;
         protected Rigidbody2D Rigidbody { private set; get; }
         protected DirectionType Direction { private set; get; }
@@ -34,6 +35,7 @@ namespace Tanks.Units
         protected virtual void Awake()
         {
             Rigidbody = this.FindComponent<Rigidbody2D>();
+            Renderer = this.FindComponent<Renderer>();
         }
         protected virtual void OnEnable()
         {
@@ -49,8 +51,11 @@ namespace Tanks.Units
             Rigidbody.simulated = false;
         }
 
-        public void Hit()
+        #region API
+        public bool Hit()
         {
+            if (Invulnerable) return false;
+
             if (_health - 1 > 0)
             {
                 _health--;
@@ -63,7 +68,34 @@ namespace Tanks.Units
                 Died?.Invoke();
                 Destroy(gameObject);
             }
+            return true;
         }
+        public void SetInvunlerable(float time)
+        {
+            if (Invulnerable) return;
+
+            StopCoroutine("InvulnerableCoroutine");
+            StopCoroutine("PulseCoroutine");
+            StartCoroutine(InvulnerableCoroutine(time));
+            StartCoroutine(PulseCoroutine());
+        }
+        private IEnumerator InvulnerableCoroutine(float time)
+        {
+            Invulnerable = true;
+            yield return new WaitForSeconds(time);
+            Invulnerable = false;
+        }
+        private IEnumerator PulseCoroutine()
+        {
+            Color startColor = Renderer.material.color;
+            while (Invulnerable)
+            {
+                Renderer.material.color = Color.red;
+                yield return new WaitForSeconds(1f);
+                Renderer.material.color = startColor;
+            }
+        }
+        #endregion
 
         protected enum DirectionType { Up, Down, Left, Right, Zero }
         protected void ChangeDirection(DirectionType direction)
@@ -104,7 +136,7 @@ namespace Tanks.Units
             bool isPlayer = this is PlayerController;
             (projectile as GameObject).GetComponent<Projectile>().SetOwner(isPlayer ? Projectile.Owner.Player : Projectile.Owner.Enemy);
             StartCoroutine(Reload());
-        }
+        }        
 
         private IEnumerator Reload()
         {
