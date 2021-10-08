@@ -43,6 +43,7 @@ namespace Tanks.Managers
 
         private void OnGameOver()
         {
+            if (CloseButton == null) return;
             MenuLabel.text = "GAME OVER";
             CloseButton.interactable = false;
         }
@@ -113,6 +114,7 @@ namespace Tanks.Managers
 
         private void ShowMenu(bool isActive)
         {
+            if (GameMenu == null) return;
             GameMenu.SetActive(isActive);
         }
     }

@@ -147,6 +147,8 @@ namespace Tanks.Managers
         }
         private void Pause(bool isPaused)
         {
+            if (AudioManager == null) return;
+
             Paused = isPaused;
             GamePaused?.Invoke(isPaused);
             AudioManager.PlayAudioShot(AudioManager.GameAudio.Pause);
@@ -172,11 +174,13 @@ namespace Tanks.Managers
         public void BackToMainMenu_UnityEditor()
         {
             SceneManager.LoadScene(0, LoadSceneMode.Single);
+            Time.timeScale = 1;
         }
         public void Restart_UnityEditor()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             OnGameStarted();
+            Time.timeScale = 1;
         }
         #endregion
     }

@@ -100,7 +100,7 @@ namespace Tanks.Units
         protected enum DirectionType { Up, Down, Left, Right, Zero }
         protected void ChangeDirection(DirectionType direction)
         {
-            if (Dead) return;
+            if (Dead || this == null) return;
             switch (direction)
             {
                 case DirectionType.Up:
