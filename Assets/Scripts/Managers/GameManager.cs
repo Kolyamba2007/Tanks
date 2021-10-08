@@ -26,7 +26,12 @@ namespace Tanks.Managers
         [SerializeField]
         private GameObject _playerPrefab;
 
+        [Header("Game Options")]
+        [SerializeField, Range(1f, 5f)]
+        private float _enemySpawnInterval;
+
         #region Properties
+        private PlayerController Player;
         private uint Score { set; get; } = 0;
         private byte BotsCount { set; get; }
         private bool Paused { set; get; } = false;
@@ -70,16 +75,22 @@ namespace Tanks.Managers
         private void Start()
         {
             OnGameStarted();
+            AudioManager.PlayAudioShot(AudioManager.GameAudio.LevelStart);
+        }
+        private IEnumerator SpawnCoroutine()
+        {
+            while (!Player.Dead)
+            {
+                yield return new WaitForSeconds(_enemySpawnInterval);
+                SpawnEnemy();
+            }
         }
 
         private void OnGameStarted()
         {
-            SpawnPlayer();
-            SpawnEnemy();
-            SpawnEnemy();
-            SpawnEnemy();
-
-            AudioManager.PlayAudioShot(AudioManager.GameAudio.LevelStart);
+            Player = SpawnPlayer();
+            for (int i = 0; i < BotsLimit; i++) SpawnEnemy();
+            StartCoroutine(SpawnCoroutine());
         }
         private void OnEnemyDied()
         {
@@ -132,7 +143,7 @@ namespace Tanks.Managers
             BotsCount++;
             return true;
         }
-        private void SpawnPlayer()
+        private PlayerController SpawnPlayer()
         {
             var spawn = GetRandomSpawn();
 
@@ -144,6 +155,7 @@ namespace Tanks.Managers
             component.RecievedDamage += () => OnPlayerRecievedDamage(component);
             component.Fire += () => AudioManager.PlayAudioShot(AudioManager.TankAudio.Shoot);
             component.Pause += () => Pause(!Paused);
+            return component;
         }
         private void Pause(bool isPaused)
         {
@@ -178,7 +190,7 @@ namespace Tanks.Managers
         }
         public void Restart_UnityEditor()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             OnGameStarted();
             Time.timeScale = 1;
         }
