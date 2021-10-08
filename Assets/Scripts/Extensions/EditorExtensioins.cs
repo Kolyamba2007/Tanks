@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tanks.Editor
 {
-    public static class EditorExtensioins
+    public static class EditorExtensions
     {
         public enum EditorMessageType : byte
         {

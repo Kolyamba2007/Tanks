@@ -12,7 +12,7 @@ public static class MonoBehaviourExtensions
     {
         var result = component.GetComponent<T>();
 #if UNITY_EDITOR
-        if (result == null) EditorExtensioins.LogError($"Component <b>{typeof(T).Name}</b> not found!");
+        if (result == null) EditorExtensions.LogError($"Component <b>{typeof(T).Name}</b> not found!");
 #endif
         return result;
     }
